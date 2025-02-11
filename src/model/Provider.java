@@ -15,6 +15,14 @@ public class Provider {
     private String phone;
     private ArrayList<Product> products;
 
+    public Provider(int id_provider, String name, String address, String phone) {
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.id_provider = id_provider;
+        products = new ArrayList<>();
+    }
+
     public Provider(String name, String address, String phone) {
         this.name = name;
         this.address = address;

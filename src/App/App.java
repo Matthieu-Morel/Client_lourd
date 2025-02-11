@@ -5,10 +5,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controler.ProduitController;
-import model.DAO.FournisseurDAO;
-import model.DAO.ProduitDAO;
-import model.DAO.VenteDAO;
 import view.*;
 
 import java.awt.*;
@@ -30,8 +26,23 @@ public class App {
         contentPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
 
         btnProduct = new JButton("Ajouter un produit");
-        btnProvider = new JButton("Ajouter un fournisseur");
+        btnProduct.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ProductView productView = new ProductView(frame);
+            }
+        });
+        btnProvider = new JButton("Fournisseurs");
+        btnProvider.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ProvidersView providerView = new ProvidersView(frame);
+            }
+        });
         btnSelling = new JButton("Ajouter une vente");
+        btnSelling.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                SellingView sellingView = new SellingView(frame);
+            }
+        });
         btnReport = new JButton("Consulter les rapports");
         btnQuit = new JButton("Quitter");
         btnQuit.addActionListener(new ActionListener() {

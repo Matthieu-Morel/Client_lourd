@@ -11,8 +11,8 @@ import controler.FournisseurController;
 import model.Provider;
 import model.DAO.FournisseurDAO;
 
-public class ProviderView {
-    private JFrame frame;
+public class AddProviderView {
+    private JDialog frame;
     private JLabel labelName;
     private JLabel labelAddress;
     private JLabel labelPhone;
@@ -20,12 +20,14 @@ public class ProviderView {
     private JTextField txtAddress;
     private JTextField txtPhone;
     private JButton btnAdd;
+    private ProvidersView parentView;
     public static void main(String[] args) {
-        new ProviderView();
+        new AddProviderView(null, null);
     }
 
-    public ProviderView() {
-        frame = new JFrame("Ajouter un fournisseur");
+    public AddProviderView(JDialog jDialog, ProvidersView providersView) {
+        this.parentView = providersView;
+        frame = new JDialog(jDialog, "Ajouter un fournisseur", true);
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new GridLayout(4, 2, 10, 10));
@@ -40,14 +42,9 @@ public class ProviderView {
         txtPhone = new JTextField(15);
 
         btnAdd = new JButton("Ajouter");
-        ProviderView vue = this;
-        btnAdd.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) { 
-                // Provider.addProvider(txtName.getText(), txtAddress.getText(), txtPhone.getText());
-                FournisseurDAO fournisseurDAO = new FournisseurDAO();
-                FournisseurController fournisseurController = new FournisseurController(vue, fournisseurDAO);
-            }
-        });
+        
+        FournisseurDAO fournisseurDAO = new FournisseurDAO();
+        FournisseurController fournisseurController = new FournisseurController(this, fournisseurDAO);
 
         contentPanel.add(labelName);
         contentPanel.add(txtName);
@@ -78,5 +75,12 @@ public class ProviderView {
 
     public void setAjouterFournisseurListener(ActionListener listener) {
         btnAdd.addActionListener(listener);
+    }
+    public void close() {
+        frame.dispose();
+    }
+
+    public ProvidersView getParentView() {
+        return parentView;
     }
 }

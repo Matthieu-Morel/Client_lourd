@@ -14,7 +14,7 @@ import javax.swing.border.EmptyBorder;
 import model.Selling;
 
 public class SellingView {
-    private JFrame frame;
+    private JDialog frame;
     private JLabel labelProduct;
     private JLabel labelQuantity;
     private JLabel labelDate;
@@ -23,11 +23,11 @@ public class SellingView {
     private JTextField txtDate;
     private JButton btnAdd;
     public static void main(String[] args) {
-        new SellingView();
+        new SellingView(null);
     }
 
-    public SellingView() {
-        frame = new JFrame("Ajouter une vente");
+    public SellingView(JFrame jFrame) {
+        frame = new JDialog(jFrame, "Ajouter une vente", true);
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new GridLayout(4, 2, 10, 10));

@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.border.EmptyBorder;
 
@@ -13,7 +15,7 @@ import model.DAO.VenteDAO;
 import controler.ProduitController;
 
 public class ProductView {
-    private JFrame frame;
+    private JDialog frame;
     private JLabel labelName;
     private JLabel labelQuantity;
     private JLabel labelUnitPrice;
@@ -24,11 +26,11 @@ public class ProductView {
     private JTextField txtProvider;
     private JButton btnAdd;
     public static void main(String[] args) {
-        new ProductView();
+        new ProductView(null);
     }
 
-    public ProductView() {
-        frame = new JFrame("Ajouter un produit");
+    public ProductView(JFrame jFrame) {
+        frame = new JDialog(jFrame, "Ajouter un produit", true);
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new GridLayout(5, 2, 10, 10));

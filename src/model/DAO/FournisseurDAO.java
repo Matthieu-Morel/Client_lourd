@@ -2,6 +2,7 @@ package model.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -17,7 +18,7 @@ public class FournisseurDAO {
             statement.setString(3, provider.getPhone());
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Erreur lors de l'ajout du produit : " + e.getMessage());
+            System.out.println("Erreur lors de l'ajout du fournisseur : " + e.getMessage());
         }
     }
     public void supprimerFournisseur(Provider provider) {
@@ -27,7 +28,7 @@ public class FournisseurDAO {
             statement.setInt(1, provider.getId_provider());
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Erreur lors de l'ajout du produit : " + e.getMessage());
+            System.out.println("Erreur lors de la suppression du fournisseur : " + e.getMessage());
         }
     }
     public void modifierFournisseur(Provider provider) {
@@ -40,16 +41,32 @@ public class FournisseurDAO {
             statement.setInt(4, provider.getId_provider());
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Erreur lors de l'ajout du produit : " + e.getMessage());
+            System.out.println("Erreur lors de la modification du fournisseur : " + e.getMessage());
         }
     }
     public ArrayList<Provider> getFournisseurs() {
         String query = "SELECT * FROM fournisseur";
+        ArrayList<Provider> providers = new ArrayList<>();
+
         try (Connection connection = Connexion.getConnection();
             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.executeUpdate();
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id_fournisseur");
+                String name = resultSet.getString("nom_fournisseur");
+                String address = resultSet.getString("adresse_fournisseur");
+                String phone = resultSet.getString("telephone_fournisseur");
+
+                Provider provider = new Provider(id, name, address, phone);
+
+                providers.add(provider);
+            }
         } catch (SQLException e) {
-            System.out.println("Erreur lors de l'ajout du produit : " + e.getMessage());
+            System.out.println("Erreur lors de l'obtention des fournisseurs : " + e.getMessage());
         }
+
+        return providers;
     }
 }
