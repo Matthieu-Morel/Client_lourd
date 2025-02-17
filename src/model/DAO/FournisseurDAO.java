@@ -4,22 +4,29 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import model.Provider;
 
 public class FournisseurDAO {
-    public void ajouterFournisseur(Provider provider) {
+    public int ajouterFournisseur(Provider provider) {
         String query = "INSERT INTO fournisseur (nom_fournisseur, adresse_fournisseur, telephone_fournisseur) VALUES (?, ?, ?)";
+        int createdId = -1;
         try (Connection connection = Connexion.getConnection();
-            PreparedStatement statement = connection.prepareStatement(query)) {
+            PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, provider.getName());
             statement.setString(2, provider.getAddress());
             statement.setString(3, provider.getPhone());
             statement.executeUpdate();
+
+            ResultSet resultSet = statement.getGeneratedKeys();
+            resultSet.next();
+            createdId = resultSet.getInt(1);
         } catch (SQLException e) {
             System.out.println("Erreur lors de l'ajout du fournisseur : " + e.getMessage());
         }
+        return createdId;
     }
     public void supprimerFournisseur(Provider provider) {
         String query = "DELETE FROM fournisseur WHERE id_fournisseur=?";

@@ -21,15 +21,21 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import controler.FournisseurController;
 import model.Provider;
 import model.DAO.FournisseurDAO;
+import utils.ButtonEditor;
+import utils.ButtonRenderer;
+import utils.CustomTableModel;
 
 public class ProvidersView {
     private JDialog frame;
     private JLabel titleLabel;
     private JButton btnAdd;
+    private JButton btnUpdate;
+    private JButton btnDelete;
     private JTable providersTable;
     private ArrayList<Provider> providers;
 
@@ -61,13 +67,48 @@ public class ProvidersView {
             data.add(providerData);
         }
 
-        DefaultTableModel model = new DefaultTableModel(data.toArray(new Object[0][]), columnNames);
+        // ProvidersView providersView = this;
+        
+        // ButtonEditor updateButtonEditor = new ButtonEditor("Modifier", frame, this);
+
+        // ActionListener updateActionListener = new ActionListener() {
+        //     public void actionPerformed(ActionEvent e) {
+        //         TableModel model = updateButtonEditor.getTable().getModel();
+        //         int columnsCount = model.getColumnCount() - 2;
+        //         String[] dataRow = new String[columnsCount];
+        //         int row = updateButtonEditor.getRow();
+        //         for (int i = 0; i < columnsCount; i++) {
+        //             String data = model.getValueAt(row, i).toString();
+        //             dataRow[i] = data;
+        //         }
+        //         Provider provider = new Provider(dataRow[0], dataRow[1], dataRow[2]);
+        //         UpdateProviderView view = new UpdateProviderView(frame, providersView, provider, row);
+        //     }
+        // };
+
+        // updateButtonEditor.addButtonActionListener(updateActionListener);
+        
+        // ButtonEditor deleteButtonEditor = new ButtonEditor("Supprimer", frame, this);
+
+        // ActionListener deleteActionListener = new ActionListener() {
+        //     public void actionPerformed(ActionEvent e) {
+        //         DefaultTableModel model = (DefaultTableModel) updateButtonEditor.getTable().getModel();
+        //         int row = deleteButtonEditor.getRow();
+        //         model.removeRow(row);
+        //     }
+        // };
+
+        // deleteButtonEditor.addButtonActionListener(deleteActionListener);
+
+        // DefaultTableModel model = new DefaultTableModel(data.toArray(new Object[0][]), columnNames);
+        CustomTableModel model = new CustomTableModel(data.toArray(new Object[0][]), columnNames);
         providersTable = new JTable(model);
-        providersTable.setEnabled(false);
+        // providersTable.getColumn("Modification").setCellRenderer(new ButtonRenderer("Modifier"));
+        // providersTable.getColumn("Modification").setCellEditor(updateButtonEditor);
         JScrollPane jScrollPane = new JScrollPane(providersTable);
 
-        btnAdd = new JButton("Ajouter un fournisseur");
         ProvidersView parentView = this;
+        btnAdd = new JButton("Ajouter un fournisseur");
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -75,22 +116,40 @@ public class ProvidersView {
             }
         });
 
+        btnUpdate = new JButton("Modifier un fournisseur");
+        btnUpdate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int row = providersTable.getSelectedRow();
+                if (row != -1) {
+                    Provider provider = providers.get(row);
+                    UpdateProviderView view = new UpdateProviderView(frame, parentView, provider, row);
+                }
+            }
+            
+        });
+
         JPanel btnContainer = new JPanel();
         btnContainer.setLayout(new BoxLayout(btnContainer, BoxLayout.X_AXIS));
         btnContainer.add(btnAdd);
+        btnContainer.add(btnUpdate);
 
         contentPanel.add(titleLabel);
         contentPanel.add(jScrollPane);
         contentPanel.add(btnContainer);
 
         frame.add(contentPanel, BorderLayout.CENTER);
-        frame.setSize(400, 600);
+        frame.setSize(750, 600);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
     }
 
     public void setProviders(ArrayList<Provider> providers) {
         this.providers = providers;
+    }
+
+    public int getProvidersCount() {
+        return providers.size();
     }
 
     public void addProviderToTable(Provider provider) {
@@ -101,7 +160,18 @@ public class ProvidersView {
             provider.getPhone(),
         };
         tableModel.addRow(providerData);
-        providersTable.setModel(tableModel);
-        providersTable.repaint();
+        providers.add(provider);
+    }
+
+    public void updateProvider(int index, Provider provider) {
+        DefaultTableModel tableModel = (DefaultTableModel) providersTable.getModel();
+        String[] providerData = {
+            provider.getName(),
+            provider.getAddress(),
+            provider.getPhone(),
+        };
+        tableModel.removeRow(index);
+        tableModel.insertRow(index, providerData);
+        providers.set(index, provider);
     }
 }
