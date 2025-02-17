@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 import model.Provider;
 import model.DAO.FournisseurDAO;
 import view.AddProviderView;
+import view.DeleteProviderView;
 import view.ProvidersView;
 import view.UpdateProviderView;
 
@@ -65,4 +66,24 @@ public class FournisseurController {
         });
     }
 
+    public FournisseurController(DeleteProviderView vue, ProvidersView parentView, FournisseurDAO fournisseurDAO, Provider provider, int row) {
+        this.fournisseurDAO = fournisseurDAO;
+        vue.addButtonCancelActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                vue.close();
+            }
+        });
+        vue.addButtonValidateActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                fournisseurDAO.supprimerFournisseur(provider);
+
+                if (parentView != null) {
+                    parentView.deleteProvider(row);
+                }
+
+                JOptionPane.showMessageDialog(null, "Fournisseur supprimé avec succès!");
+                vue.close();
+            }
+        });
+    }
 }

@@ -91,10 +91,25 @@ public class ProvidersView {
             
         });
 
+        btnDelete = new JButton("Supprimer un fournisseur");
+        btnDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int row = providersTable.getSelectedRow();
+                if (row != -1) {
+                    Provider provider = providers.get(row);
+                    DeleteProviderView view = new DeleteProviderView(frame, parentView, provider, row);
+                }
+            }
+            
+        });
+
         JPanel btnContainer = new JPanel();
         btnContainer.setLayout(new BoxLayout(btnContainer, BoxLayout.X_AXIS));
         btnContainer.add(btnAdd);
         btnContainer.add(btnUpdate);
+        btnContainer.add(btnDelete);
+
 
         contentPanel.add(titleLabel);
         contentPanel.add(jScrollPane);
@@ -135,5 +150,11 @@ public class ProvidersView {
         tableModel.removeRow(index);
         tableModel.insertRow(index, providerData);
         providers.set(index, provider);
+    }
+
+    public void deleteProvider(int index) {
+        DefaultTableModel tableModel = (DefaultTableModel) providersTable.getModel();
+        tableModel.removeRow(index);
+        providers.remove(index);
     }
 }
