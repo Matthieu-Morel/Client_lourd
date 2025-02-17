@@ -26,8 +26,6 @@ import javax.swing.table.TableModel;
 import controler.FournisseurController;
 import model.Provider;
 import model.DAO.FournisseurDAO;
-import utils.ButtonEditor;
-import utils.ButtonRenderer;
 import utils.CustomTableModel;
 
 public class ProvidersView {
@@ -67,44 +65,8 @@ public class ProvidersView {
             data.add(providerData);
         }
 
-        // ProvidersView providersView = this;
-        
-        // ButtonEditor updateButtonEditor = new ButtonEditor("Modifier", frame, this);
-
-        // ActionListener updateActionListener = new ActionListener() {
-        //     public void actionPerformed(ActionEvent e) {
-        //         TableModel model = updateButtonEditor.getTable().getModel();
-        //         int columnsCount = model.getColumnCount() - 2;
-        //         String[] dataRow = new String[columnsCount];
-        //         int row = updateButtonEditor.getRow();
-        //         for (int i = 0; i < columnsCount; i++) {
-        //             String data = model.getValueAt(row, i).toString();
-        //             dataRow[i] = data;
-        //         }
-        //         Provider provider = new Provider(dataRow[0], dataRow[1], dataRow[2]);
-        //         UpdateProviderView view = new UpdateProviderView(frame, providersView, provider, row);
-        //     }
-        // };
-
-        // updateButtonEditor.addButtonActionListener(updateActionListener);
-        
-        // ButtonEditor deleteButtonEditor = new ButtonEditor("Supprimer", frame, this);
-
-        // ActionListener deleteActionListener = new ActionListener() {
-        //     public void actionPerformed(ActionEvent e) {
-        //         DefaultTableModel model = (DefaultTableModel) updateButtonEditor.getTable().getModel();
-        //         int row = deleteButtonEditor.getRow();
-        //         model.removeRow(row);
-        //     }
-        // };
-
-        // deleteButtonEditor.addButtonActionListener(deleteActionListener);
-
-        // DefaultTableModel model = new DefaultTableModel(data.toArray(new Object[0][]), columnNames);
         CustomTableModel model = new CustomTableModel(data.toArray(new Object[0][]), columnNames);
         providersTable = new JTable(model);
-        // providersTable.getColumn("Modification").setCellRenderer(new ButtonRenderer("Modifier"));
-        // providersTable.getColumn("Modification").setCellEditor(updateButtonEditor);
         JScrollPane jScrollPane = new JScrollPane(providersTable);
 
         ProvidersView parentView = this;
