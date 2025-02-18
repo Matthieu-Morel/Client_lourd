@@ -15,11 +15,15 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -67,6 +71,7 @@ public class ProvidersView {
 
         CustomTableModel model = new CustomTableModel(data.toArray(new Object[0][]), columnNames);
         providersTable = new JTable(model);
+        providersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane jScrollPane = new JScrollPane(providersTable);
 
         ProvidersView parentView = this;
@@ -79,6 +84,7 @@ public class ProvidersView {
         });
 
         btnUpdate = new JButton("Modifier un fournisseur");
+        btnUpdate.setEnabled(false);
         btnUpdate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -87,11 +93,15 @@ public class ProvidersView {
                     Provider provider = providers.get(row);
                     UpdateProviderView view = new UpdateProviderView(frame, parentView, provider, row);
                 }
+                else{
+                    JOptionPane.showMessageDialog(null, "Veuill");
+                }
             }
             
         });
 
         btnDelete = new JButton("Supprimer un fournisseur");
+        btnDelete.setEnabled(false);
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -99,6 +109,22 @@ public class ProvidersView {
                 if (row != -1) {
                     Provider provider = providers.get(row);
                     DeleteProviderView view = new DeleteProviderView(frame, parentView, provider, row);
+                }
+            }
+            
+        });
+
+        providersTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int row = providersTable.getSelectedRow();
+                if (row != -1) {
+                    btnUpdate.setEnabled(true);
+                    btnDelete.setEnabled(true);
+                }
+                else{
+                    btnUpdate.setEnabled(false);
+                    btnDelete.setEnabled(false);
                 }
             }
             
