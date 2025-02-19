@@ -93,9 +93,6 @@ public class ProvidersView {
                     Provider provider = providers.get(row);
                     UpdateProviderView view = new UpdateProviderView(frame, parentView, provider, row);
                 }
-                else{
-                    JOptionPane.showMessageDialog(null, "Veuill");
-                }
             }
             
         });

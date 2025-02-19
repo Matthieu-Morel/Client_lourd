@@ -12,13 +12,6 @@ public class Connexion {
     private Connexion() {} 
 
     public static Connection getConnection() {
-        // if (connection == null) {
-        //     try {
-        //         connection = DriverManager.getConnection(URL, USER, PASSWORD);
-        //     } catch (SQLException e) {
-        //         System.out.println("Erreur de connexion à la base de données : " + e.getMessage());
-        //     }
-        // }
 
         try {
             if (connection == null || connection.isClosed()) {

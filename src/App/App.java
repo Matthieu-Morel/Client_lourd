@@ -25,13 +25,13 @@ public class App {
         contentPanel.setLayout(new GridLayout(5, 1, 10, 10));
         contentPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
 
-        btnProduct = new JButton("Ajouter un produit");
+        btnProduct = new JButton("Gestion des produits");
         btnProduct.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ProductView productView = new ProductView(frame);
+                ProductsView view = new ProductsView(frame);
             }
         });
-        btnProvider = new JButton("Fournisseurs");
+        btnProvider = new JButton("Gestion des fournisseurs");
         btnProvider.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ProvidersView providerView = new ProvidersView(frame);

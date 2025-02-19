@@ -6,15 +6,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
 
 import javax.swing.border.EmptyBorder;
 
 import model.Product;
+import model.Provider;
 import model.DAO.ProduitDAO;
 import model.DAO.VenteDAO;
 import controler.ProduitController;
 
-public class ProductView {
+public class AddProductView {
     private JDialog frame;
     private JLabel labelName;
     private JLabel labelQuantity;
@@ -23,13 +25,11 @@ public class ProductView {
     private JTextField txtName;
     private JTextField txtQuantity;
     private JTextField txtUnitPrice;
-    private JTextField txtProvider;
+    private JComboBox jBoxProvider;
     private JButton btnAdd;
-    public static void main(String[] args) {
-        new ProductView(null);
-    }
+    private ArrayList<Provider> providers;
 
-    public ProductView(JFrame jFrame) {
+    public AddProductView(JFrame jFrame, ProductsView parentView, ArrayList<Provider> providers) {
         frame = new JDialog(jFrame, "Ajouter un produit", true);
 
         JPanel contentPanel = new JPanel();
@@ -38,25 +38,19 @@ public class ProductView {
 
         labelName = new JLabel("Nom du produit :");
         labelQuantity = new JLabel("Quantité en stock :");
-        labelUnitPrice = new JLabel("Prix unitaire :");
+        labelUnitPrice = new JLabel("Prix unitaire (euros) :");
         labelProvider = new JLabel("Fournisseur :");
 
         txtName = new JTextField(15);
         txtQuantity = new JTextField(15);
         txtUnitPrice = new JTextField(15);
-        txtProvider = new JTextField(15);
+        jBoxProvider = new JComboBox<>(providers.toArray());
 
         btnAdd = new JButton("Ajouter");
-        ProductView vue = this;
-        btnAdd.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Product.addProduct(txtName.getText(), Integer.parseInt(txtQuantity.getText()), Double.parseDouble(txtUnitPrice.getText()), Integer.parseInt(txtProvider.getText()));
-                ProduitDAO produitDAO = new ProduitDAO();
-                VenteDAO venteDAO = new VenteDAO();
-                ProduitController controller = new ProduitController(vue, produitDAO, venteDAO);
-            }
-        });
-
+        
+        ProduitDAO produitDAO = new ProduitDAO();
+        ProduitController controller = new ProduitController(this, produitDAO, parentView);
+        
         contentPanel.add(labelName);
         contentPanel.add(txtName);
         contentPanel.add(labelQuantity);
@@ -64,7 +58,7 @@ public class ProductView {
         contentPanel.add(labelUnitPrice);
         contentPanel.add(txtUnitPrice);
         contentPanel.add(labelProvider);
-        contentPanel.add(txtProvider);
+        contentPanel.add(jBoxProvider);
         contentPanel.add(btnAdd);
 
         frame.add(contentPanel, BorderLayout.CENTER);
@@ -83,11 +77,15 @@ public class ProductView {
     public int getQuantity() {
         return Integer.parseInt(txtQuantity.getText());
     }
-    public int getProvider() {
-        return Integer.parseInt(txtProvider.getText());
+    public Provider getProvider() {
+        Provider provider = (Provider) jBoxProvider.getSelectedItem();
+        return provider;
     }
     public void setAjouterProduitListener(ActionListener listener) {
         btnAdd.addActionListener(listener);
+    }
+    public void close() {
+        frame.dispose();
     }
        
 }

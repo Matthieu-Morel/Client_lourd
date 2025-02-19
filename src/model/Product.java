@@ -16,6 +16,15 @@ public class Product {
     private Provider provider;
     private ArrayList<Selling> sellings;
 
+    public Product(int id, String name, int quantity, double unitPrice, Provider provider) {
+        this.id_product = id;
+        this.name = name;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.provider = provider;
+        sellings = new ArrayList<>();
+    }
+
     public Product(String name, int quantity, double unitPrice, Provider provider) {
         this.name = name;
         this.quantity = quantity;

@@ -76,4 +76,26 @@ public class FournisseurDAO {
 
         return providers;
     }
+    public Provider getFournisseurById(int idProvider) {
+        String query = "SELECT * FROM fournisseur WHERE id_fournisseur=?";
+        Provider provider = new Provider();
+
+        try (Connection connection = Connexion.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, idProvider);
+
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+
+            int id = resultSet.getInt("id_fournisseur");
+            String name = resultSet.getString("nom_fournisseur");
+            String address = resultSet.getString("adresse_fournisseur");
+            String phone = resultSet.getString("telephone_fournisseur");
+            provider = new Provider(id, name, address, phone);
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de l'obtention des fournisseurs : " + e.getMessage());
+        }
+
+        return provider;
+    }
 }
