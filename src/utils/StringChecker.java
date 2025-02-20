@@ -19,4 +19,13 @@ public class StringChecker {
         }
         return true;
     }
+
+    public static boolean isInteger(String string) {
+        try {
+            int test = Integer.parseInt(string);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }

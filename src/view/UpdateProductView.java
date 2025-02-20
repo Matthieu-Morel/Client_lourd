@@ -1,22 +1,25 @@
 package view;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import java.awt.*;
+import java.awt.event.ActionListener;
+
+import controler.ProduitController;
 import model.Product;
 import model.Provider;
 import model.DAO.ProduitDAO;
-import model.DAO.VenteDAO;
-import controler.ProduitController;
 
-public class AddProductView {
+public class UpdateProductView {
     private JDialog frame;
     private JLabel labelName;
     private JLabel labelQuantity;
@@ -28,9 +31,13 @@ public class AddProductView {
     private JComboBox jBoxProvider;
     private JButton btnAdd;
     private ArrayList<Provider> providers;
+    private int idProduct;
+    private int indexRow;
 
-    public AddProductView(JFrame jFrame, ProductsView parentView, ArrayList<Provider> providers) {
-        frame = new JDialog(jFrame, "Ajouter un produit", true);
+    public UpdateProductView(JDialog jDialog, ProductsView parentView, Product product, ArrayList<Provider> providers, int indexRow) {
+        this.idProduct = product.getId_product();
+        this.indexRow = indexRow;
+        frame = new JDialog(jDialog, "Modifier un produit", true);
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new GridLayout(5, 2, 10, 10));
@@ -41,12 +48,22 @@ public class AddProductView {
         labelUnitPrice = new JLabel("Prix unitaire (euros) :");
         labelProvider = new JLabel("Fournisseur :");
 
-        txtName = new JTextField(15);
-        txtQuantity = new JTextField(15);
-        txtUnitPrice = new JTextField(15);
+
+
+        txtName = new JTextField(product.getName(), 15);
+        txtQuantity = new JTextField(Integer.toString(product.getQuantity()), 15);
+        txtUnitPrice = new JTextField(Double.toString(product.getUnitPrice()), 15);
         jBoxProvider = new JComboBox<>(providers.toArray());
 
-        btnAdd = new JButton("Ajouter");
+        Provider providerProduct = product.getProvider();
+        for (Provider provider : providers) {
+            if (provider.getId_provider() == providerProduct.getId_provider()) {
+                jBoxProvider.setSelectedItem(provider);
+                break;
+            }
+        }
+
+        btnAdd = new JButton("Modifier");
         
         ProduitDAO produitDAO = new ProduitDAO();
         ProduitController controller = new ProduitController(this, produitDAO, parentView);
@@ -65,14 +82,18 @@ public class AddProductView {
 
         frame.setSize(400, 300);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setVisible(true); 
+        frame.setVisible(true);
+    }
+
+    public void addModifierProduitListener(ActionListener listener) {
+        btnAdd.addActionListener(listener);
     }
 
     public String getNomProduit() {
         return txtName.getText();
     }
     public String getPrixProduit() {
-            return txtUnitPrice.getText();
+        return txtUnitPrice.getText();
     }
     public String getQuantity() {
         return txtQuantity.getText();
@@ -81,11 +102,13 @@ public class AddProductView {
         Provider provider = (Provider) jBoxProvider.getSelectedItem();
         return provider;
     }
-    public void setAjouterProduitListener(ActionListener listener) {
-        btnAdd.addActionListener(listener);
-    }
     public void close() {
         frame.dispose();
     }
-       
+    public int getIdProduct() {
+        return idProduct;
+    }
+    public int getIndexRow() {
+        return indexRow;
+    }
 }

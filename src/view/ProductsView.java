@@ -89,6 +89,11 @@ public class ProductsView {
         btnUpdate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int row = productsTable.getSelectedRow();
+                if (row != -1) {
+                    Product product = products.get(row);
+                    UpdateProductView view = new UpdateProductView(frame, parentView, product, providers, row);
+                }
             }
         });
 
@@ -97,6 +102,11 @@ public class ProductsView {
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int row = productsTable.getSelectedRow();
+                if (row != -1) {
+                    Product product = products.get(row);
+                    DeleteProductView view = new DeleteProductView(frame, parentView, product, row);
+                }
             }
         });
 
@@ -150,5 +160,24 @@ public class ProductsView {
         };
         tableModel.addRow(productData);
         products.add(product);
+    }
+
+    public void updateProduct(int index, Product product) {
+        DefaultTableModel tableModel = (DefaultTableModel) productsTable.getModel();
+        String[] productData = {
+            product.getName(),
+            Integer.toString(product.getQuantity()),
+            Double.toString(product.getUnitPrice()),
+            product.getProvider().getName(),
+        };
+        tableModel.removeRow(index);
+        tableModel.insertRow(index, productData);
+        products.set(index, product);
+    }
+
+    public void deleteProduct(int index) {
+        DefaultTableModel tableModel = (DefaultTableModel) productsTable.getModel();
+        tableModel.removeRow(index);
+        products.remove(index);
     }
 }
