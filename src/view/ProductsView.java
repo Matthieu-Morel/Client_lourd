@@ -25,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 import controler.ProduitController;
 import model.Product;
 import model.Provider;
+import model.Utilisateur;
 import model.DAO.FournisseurDAO;
 import model.DAO.ProduitDAO;
 import utils.CustomTableModel;
@@ -39,7 +40,7 @@ public class ProductsView {
     private ArrayList<Product> products;
     private ArrayList<Provider> providers;
 
-    public ProductsView(JFrame jFrame) {
+    public ProductsView(JFrame jFrame, Utilisateur utilisateur) {
         frame = new JDialog(jFrame, "Gestion des Produits", true);
 
         JPanel contentPanel = new JPanel();
@@ -116,7 +117,9 @@ public class ProductsView {
                 int row = productsTable.getSelectedRow();
                 if (row != -1) {
                     btnUpdate.setEnabled(true);
-                    btnDelete.setEnabled(true);
+                    if (!utilisateur.getRole().equals("manager")) {
+                        btnDelete.setEnabled(true);
+                    }
                 }
                 else{
                     btnUpdate.setEnabled(false);

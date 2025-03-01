@@ -29,6 +29,7 @@ import javax.swing.table.TableModel;
 
 import controler.FournisseurController;
 import model.Provider;
+import model.Utilisateur;
 import model.DAO.FournisseurDAO;
 import utils.CustomTableModel;
 
@@ -41,7 +42,7 @@ public class ProvidersView {
     private JTable providersTable;
     private ArrayList<Provider> providers;
 
-    public ProvidersView(JFrame jFrame){
+    public ProvidersView(JFrame jFrame, Utilisateur utilisateur){
         frame = new JDialog(jFrame, "Fournisseurs", true);
 
         JPanel contentPanel = new JPanel();
@@ -117,7 +118,9 @@ public class ProvidersView {
                 int row = providersTable.getSelectedRow();
                 if (row != -1) {
                     btnUpdate.setEnabled(true);
-                    btnDelete.setEnabled(true);
+                    if (!utilisateur.getRole().equals("manager")) {
+                        btnDelete.setEnabled(true);
+                    }
                 }
                 else{
                     btnUpdate.setEnabled(false);
