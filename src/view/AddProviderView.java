@@ -20,43 +20,63 @@ public class AddProviderView {
     private JTextField txtAddress;
     private JTextField txtPhone;
     private JButton btnAdd;
+    private JButton btnCancel;
     private ProvidersView parentView;
-    public static void main(String[] args) {
-        new AddProviderView(null, null);
-    }
 
     public AddProviderView(JDialog jDialog, ProvidersView providersView) {
         this.parentView = providersView;
         frame = new JDialog(jDialog, "Ajouter un fournisseur", true);
 
         JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new GridLayout(4, 2, 10, 10));
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
 
-        labelName = new JLabel("Nom du fournisseur :");
-        labelAddress = new JLabel("Adresse du fournisseur :");
-        labelPhone = new JLabel("Téléphone du fournisseur :");
+        labelName = new JLabel("Nom du fournisseur :", SwingConstants.CENTER);
+        labelAddress = new JLabel("Adresse du fournisseur :", SwingConstants.CENTER);
+        labelPhone = new JLabel("Téléphone du fournisseur :", SwingConstants.CENTER);
 
         txtName = new JTextField(15);
         txtAddress = new JTextField(15);
         txtPhone = new JTextField(15);
 
         btnAdd = new JButton("Ajouter");
+        btnAdd.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        btnCancel = new JButton("Annuler");
+        btnCancel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnCancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                close();
+            }
+        });
         
         FournisseurDAO fournisseurDAO = new FournisseurDAO();
         FournisseurController fournisseurController = new FournisseurController(this, fournisseurDAO);
 
-        contentPanel.add(labelName);
-        contentPanel.add(txtName);
-        contentPanel.add(labelAddress);
-        contentPanel.add(txtAddress);
-        contentPanel.add(labelPhone);
-        contentPanel.add(txtPhone);
-        contentPanel.add(btnAdd);
+        JPanel formContainer = new JPanel();
+        formContainer.setLayout(new GridLayout(3, 2, 10, 10));
+        formContainer.setBorder(new EmptyBorder(0, 0, 10, 0));
+        formContainer.add(labelName);
+        formContainer.add(txtName);
+        formContainer.add(labelAddress);
+        formContainer.add(txtAddress);
+        formContainer.add(labelPhone);
+        formContainer.add(txtPhone);
+
+        JPanel btnContainer = new JPanel();
+        btnContainer.setLayout(new BoxLayout(btnContainer, BoxLayout.X_AXIS));
+        btnContainer.add(btnCancel);
+        btnContainer.add(Box.createRigidArea(new Dimension(10, 0)));
+        btnContainer.add(btnAdd);
+
+        contentPanel.add(formContainer);
+        contentPanel.add(btnContainer);
 
         frame.add(contentPanel, BorderLayout.CENTER);
 
-        frame.setSize(400, 300);
+        frame.pack();
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true); 
     }

@@ -24,7 +24,7 @@ public class MenuPrincipal extends JFrame {
         this.utilisateur = utilisateur; 
         setTitle("Menu Principal"); 
         setLayout(new FlowLayout()); 
-        setSize(400, 200); 
+        setSize(350, 400); 
     
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new GridLayout(5, 1, 10, 10));
@@ -35,12 +35,14 @@ public class MenuPrincipal extends JFrame {
         FournisseurDAO fournisseurDAO = new FournisseurDAO();
 
         btnProvider = new JButton("Gestion des fournisseurs");
+        btnProvider.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         btnProvider.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ProvidersView providerView = new ProvidersView(frame, utilisateur);
             }
         });
         btnProduct = new JButton("Gestion des produits");
+        btnProduct.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         btnProduct.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ArrayList<Provider> providers = fournisseurDAO.getFournisseurs();
@@ -52,12 +54,14 @@ public class MenuPrincipal extends JFrame {
             }
         });
         btnSelling = new JButton("Gestion des ventes");
+        btnSelling.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         btnSelling.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 SellingView sellingView = new SellingView(frame);
             }
         });
         btnLogout = new JButton("Déconnexion");
+        btnLogout.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         btnLogout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -66,6 +70,7 @@ public class MenuPrincipal extends JFrame {
             } 
         });
         btnQuit = new JButton("Quitter");
+        btnQuit.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         btnQuit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
@@ -80,9 +85,8 @@ public class MenuPrincipal extends JFrame {
         contentPanel.add(btnQuit);
 
         add(contentPanel, BorderLayout.CENTER);
- 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-        setSize(500, 500);
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true); 
     } 
 }

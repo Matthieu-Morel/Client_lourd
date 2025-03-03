@@ -1,5 +1,7 @@
 package view;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -30,10 +32,11 @@ public class DeleteProductView {
         frame = new JDialog(jDialog, "Supprimer un produit", true);
 
         JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new GridLayout(3, 1, 10, 10));
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
 
         labelDelete = new JLabel("Souhaitez-vous supprimer le produit \"" + product.getName() + "\" ?");
+        labelDelete.setAlignmentX(Component.CENTER_ALIGNMENT);
         
         btnCancel = new JButton("Annuler");
         btnValidate = new JButton("Supprimer");
@@ -41,13 +44,20 @@ public class DeleteProductView {
         ProduitDAO produitDAO = new ProduitDAO();
         ProduitController controller = new ProduitController(this, produitDAO, parentView, product, row);
 
+        JPanel btnContainer = new JPanel();
+        btnContainer.setLayout(new BoxLayout(btnContainer, BoxLayout.X_AXIS));
+        btnContainer.add(btnCancel);
+        btnContainer.add(Box.createRigidArea(new Dimension(10, 0)));
+        btnContainer.add(btnValidate);
+
         contentPanel.add(labelDelete);
-        contentPanel.add(btnCancel);
-        contentPanel.add(btnValidate);
+        contentPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        contentPanel.add(btnContainer);
 
         frame.add(contentPanel);
 
-        frame.setSize(400, 300);
+        frame.pack();
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
     }

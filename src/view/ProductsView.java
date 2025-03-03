@@ -1,12 +1,14 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -37,6 +39,7 @@ public class ProductsView {
     private JButton btnAdd;
     private JButton btnUpdate;
     private JButton btnDelete;
+    private JButton btnBackToMenu;
     private ArrayList<Product> products;
     private ArrayList<Provider> providers;
 
@@ -44,7 +47,7 @@ public class ProductsView {
         frame = new JDialog(jFrame, "Gestion des Produits", true);
 
         JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new GridLayout(3, 1, 10, 10));
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
 
         titleLabel = new JLabel("Liste des Produits", SwingConstants.CENTER);
@@ -111,6 +114,14 @@ public class ProductsView {
             }
         });
 
+        btnBackToMenu = new JButton("Retour");
+        btnBackToMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+            }
+        });
+
         productsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -129,18 +140,29 @@ public class ProductsView {
             
         });
 
+        JPanel titleAndBackContainer = new JPanel();
+        titleAndBackContainer.setLayout(new BorderLayout());
+        titleAndBackContainer.add(btnBackToMenu, BorderLayout.WEST);
+        titleAndBackContainer.add(titleLabel, BorderLayout.CENTER);
+        titleAndBackContainer.add(Box.createRigidArea(new Dimension((int) btnBackToMenu.getPreferredSize().getWidth(), 0)), BorderLayout.EAST);
+
         JPanel btnContainer = new JPanel();
         btnContainer.setLayout(new BoxLayout(btnContainer, BoxLayout.X_AXIS));
         btnContainer.add(btnAdd);
+        btnContainer.add(Box.createRigidArea(new Dimension(10, 0)));
         btnContainer.add(btnUpdate);
+        btnContainer.add(Box.createRigidArea(new Dimension(10, 0)));
         btnContainer.add(btnDelete);
 
-        contentPanel.add(titleLabel);
+        contentPanel.add(titleAndBackContainer);
+        contentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         contentPanel.add(jScrollPane);
+        contentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         contentPanel.add(btnContainer);
 
         frame.add(contentPanel, BorderLayout.CENTER);
-        frame.setSize(900, 600);
+        frame.pack();
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
     }
