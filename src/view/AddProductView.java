@@ -30,8 +30,8 @@ public class AddProductView {
     private JButton btnCancel;
     private ArrayList<Provider> providers;
 
-    public AddProductView(JFrame jFrame, ProductsView parentView, ArrayList<Provider> providers) {
-        frame = new JDialog(jFrame, "Ajouter un produit", true);
+    public AddProductView(JDialog jDialog, ProductsView parentView, ArrayList<Provider> providers) {
+        frame = new JDialog(jDialog, "Ajouter un produit", true);
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));

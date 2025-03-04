@@ -84,7 +84,7 @@ public class ProductsView {
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AddProductView view = new AddProductView(jFrame, parentView, providers);
+                AddProductView view = new AddProductView(frame, parentView, providers);
             }
         });
 

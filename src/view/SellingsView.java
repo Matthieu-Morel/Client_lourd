@@ -87,7 +87,7 @@ public class SellingsView {
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AddSellingView view = new AddSellingView(jFrame, parentView, products);
+                AddSellingView view = new AddSellingView(frame, parentView, products);
             }
         });
 
@@ -96,11 +96,11 @@ public class SellingsView {
         btnUpdate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // int row = productsTable.getSelectedRow();
-                // if (row != -1) {
-                //     Product product = products.get(row);
-                //     UpdateProductView view = new UpdateProductView(frame, parentView, product, providers, row);
-                // }
+                int row = sellingsTable.getSelectedRow();
+                if (row != -1) {
+                    Selling selling = sellings.get(row);
+                    UpdateSellingView view = new UpdateSellingView(frame, parentView, products, selling, row);
+                }
             }
         });
 
@@ -109,11 +109,11 @@ public class SellingsView {
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // int row = productsTable.getSelectedRow();
-                // if (row != -1) {
-                //     Product product = products.get(row);
-                //     DeleteProductView view = new DeleteProductView(frame, parentView, product, row);
-                // }
+                int row = sellingsTable.getSelectedRow();
+                if (row != -1) {
+                    Selling selling = sellings.get(row);
+                    DeleteSellingView view = new DeleteSellingView(frame, parentView, selling, row);
+                }
             }
         });
 
@@ -189,5 +189,24 @@ public class SellingsView {
         };
         tableModel.addRow(sellingData);
         sellings.add(selling);
+    }
+
+    public void updateSelling(int index, Selling selling) {
+        DefaultTableModel tableModel = (DefaultTableModel) sellingsTable.getModel();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String[] sellingData = {
+            selling.getProduct().getName(),
+            Integer.toString(selling.getQuantitySold()),
+            simpleDateFormat.format(selling.getDateSold()),
+        };
+        tableModel.removeRow(index);
+        tableModel.insertRow(index, sellingData);
+        sellings.set(index, selling);
+    }
+
+    public void deleteSelling(int index) {
+        DefaultTableModel tableModel = (DefaultTableModel) sellingsTable.getModel();
+        tableModel.removeRow(index);
+        sellings.remove(index);
     }
 }

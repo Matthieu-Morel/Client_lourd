@@ -12,7 +12,9 @@ import model.Selling;
 import model.DAO.ProduitDAO;
 import model.DAO.VenteDAO;
 import view.AddSellingView;
+import view.DeleteSellingView;
 import view.SellingsView;
+import view.UpdateSellingView;
 
 public class VenteController {
     
@@ -42,6 +44,50 @@ public class VenteController {
                 JOptionPane.showMessageDialog(null, "Vente ajoutée avec succès!");
                 view.close();
             }
+        });
+    }
+
+    public VenteController(UpdateSellingView view, VenteDAO venteDAO, SellingsView parentView) {
+        view.addButtonUpdateListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Product product = view.getProduct();
+                String quantitySold = view.getQuantity();
+                Date date = view.getDate();
+
+                Selling selling = new Selling(view.getIdSelling(), product, Integer.parseInt(quantitySold), date);
+
+                venteDAO.modifierVente(selling);
+
+                if (parentView != null) {
+                    parentView.updateSelling(view.getIndexRow(), selling);
+                }
+    
+                JOptionPane.showMessageDialog(null, "Vente modifiée avec succès!");
+                view.close();
+            }
+        });
+    }
+
+    public VenteController(DeleteSellingView view, VenteDAO venteDAO, SellingsView parentView, Selling selling, int row) {
+        view.addButtonCancelListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                view.close();
+            }
+        });
+        view.addButtonValidateListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                venteDAO.supprimerVente(selling);
+                
+                if (parentView != null) {
+                    parentView.deleteSelling(row);
+                }
+                JOptionPane.showMessageDialog(null, "Vente supprimée avec succès!");
+                view.close();
+            }
+
         });
     }
 }

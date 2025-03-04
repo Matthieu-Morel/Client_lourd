@@ -89,7 +89,7 @@ public class VenteDAO {
                 sellings.add(selling);
             }
         } catch (SQLException e) {
-            System.out.println("Erreur lors de l'obtention des produits : " + e.getMessage());
+            System.out.println("Erreur lors de l'obtention des ventes : " + e.getMessage());
         }
 
         return sellings;
