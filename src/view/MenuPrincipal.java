@@ -3,9 +3,11 @@ package view;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import model.Product;
 import model.Provider;
 import model.Utilisateur;
 import model.DAO.FournisseurDAO;
+import model.DAO.ProduitDAO;
 
 import java.awt.*; 
 import java.awt.event.ActionEvent; 
@@ -33,6 +35,7 @@ public class MenuPrincipal extends JFrame {
         JFrame frame = this;
 
         FournisseurDAO fournisseurDAO = new FournisseurDAO();
+        ProduitDAO produitDAO = new ProduitDAO();
 
         btnProvider = new JButton("Gestion des fournisseurs");
         btnProvider.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
@@ -57,7 +60,12 @@ public class MenuPrincipal extends JFrame {
         btnSelling.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         btnSelling.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                SellingsView view = new SellingsView(frame, utilisateur);
+                ArrayList<Product> products = produitDAO.getProduits();
+                if (products.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Aucun produit disponible. Veuillez ajouter un produit pour ajouter une vente.");
+                } else {
+                    SellingsView view = new SellingsView(frame, utilisateur);
+                }
             }
         });
         btnLogout = new JButton("Déconnexion");

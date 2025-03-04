@@ -46,7 +46,7 @@ public class ProvidersView {
     private ArrayList<Provider> providers;
 
     public ProvidersView(JFrame jFrame, Utilisateur utilisateur){
-        frame = new JDialog(jFrame, "Fournisseurs", true);
+        frame = new JDialog(jFrame, "Gestion des fournisseurs", true);
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));

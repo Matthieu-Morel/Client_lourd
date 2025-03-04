@@ -72,13 +72,4 @@ public class Selling {
         System.out.println("Le fournisseur du produit "+product.getName()+" est "+product.getProvider().getName());
     }
 
-    @Override
-    public String toString() {
-        return "Provider{"+
-                "id_selling=" + id_selling +
-                ", product=" + product +
-                ", quantitySold=" + quantitySold +
-                ", dateSold=" + dateSold +
-                "}";
-    }
 }

@@ -44,13 +44,13 @@ public class ProductsView {
     private ArrayList<Provider> providers;
 
     public ProductsView(JFrame jFrame, Utilisateur utilisateur) {
-        frame = new JDialog(jFrame, "Gestion des Produits", true);
+        frame = new JDialog(jFrame, "Gestion des produits", true);
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
 
-        titleLabel = new JLabel("Liste des Produits", SwingConstants.CENTER);
+        titleLabel = new JLabel("Liste des produits", SwingConstants.CENTER);
 
         String[] columnNames = {
             "Nom du produit",
