@@ -165,6 +165,7 @@ public class ProvidersView {
         frame.pack();
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 

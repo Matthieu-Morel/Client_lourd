@@ -57,7 +57,7 @@ public class MenuPrincipal extends JFrame {
         btnSelling.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         btnSelling.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                SellingView sellingView = new SellingView(frame);
+                SellingsView view = new SellingsView(frame, utilisateur);
             }
         });
         btnLogout = new JButton("Déconnexion");
@@ -87,6 +87,7 @@ public class MenuPrincipal extends JFrame {
         add(contentPanel, BorderLayout.CENTER);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
         setVisible(true); 
     } 
 }

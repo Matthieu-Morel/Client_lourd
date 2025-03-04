@@ -30,7 +30,7 @@ public class LoginView extends JFrame{
  
         setTitle("Connexion"); 
         setLayout(new FlowLayout()); 
-        setSize(300, 130); 
+        setSize(400, 200); 
  
         JLabel userNameLabel = new JLabel("Nom d'utilisateur:", SwingConstants.CENTER); 
         JTextField userNameField = new JTextField(15); 
@@ -99,6 +99,7 @@ public class LoginView extends JFrame{
 
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
+        jPanel.setBorder(new EmptyBorder( 35, 0, 0, 0));
         jPanel.add(formPanel);
         jPanel.add(btnContainer);
  
@@ -106,6 +107,7 @@ public class LoginView extends JFrame{
  
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         setResizable(false);
+        setLocationRelativeTo(null);
         setVisible(true); 
     }
 }

@@ -14,16 +14,20 @@ public class Selling {
     private Product product;
     private int quantitySold;
     private Date dateSold;
-    private ArrayList<Rapport> rapports;
+
+    public Selling(int id, Product product, int quantitySold, Date dateSold) {
+        this.id_selling = id;
+        this.product = product;
+        this.quantitySold = quantitySold;
+        this.dateSold = dateSold;
+    }
 
     public Selling(Product product, int quantitySold, Date dateSold) {
         this.product = product;
         this.quantitySold = quantitySold;
         this.dateSold = dateSold;
-        rapports = new ArrayList<>();
     }
     public Selling() {
-        rapports = new ArrayList<>();
     }
 
     public Product getProduct() {
@@ -50,12 +54,6 @@ public class Selling {
     public void setId_selling(int id_selling) {
         this.id_selling = id_selling;
     }
-    public ArrayList<Rapport> getRapports() {
-        return rapports;
-    }
-    public void addRapports(Rapport rapport) {
-        this.rapports.add(rapport);
-    }
 
     public boolean isInStock() {
         if (product.getQuantity() > 0) {
@@ -67,11 +65,11 @@ public class Selling {
     }
 
     public void printQuantity() {
-        System.out.println("La quantité de "+product.getName()+" est "+product.getQuantity());
+        System.out.println("La quantité du produit "+product.getName()+" est "+product.getQuantity());
     }
 
     public void printProvider() {
-        System.out.println("La quantité de "+product.getName()+" est "+product.getProvider().getName());
+        System.out.println("Le fournisseur du produit "+product.getName()+" est "+product.getProvider().getName());
     }
 
     @Override
@@ -81,41 +79,6 @@ public class Selling {
                 ", product=" + product +
                 ", quantitySold=" + quantitySold +
                 ", dateSold=" + dateSold +
-                ". rapports=" + rapports +
                 "}";
-    }
-
-    public static void addSelling(int quantity, String date, int product) {
-        try {
-            // Connexion à la base de données 
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/gestion_stock", "user1", "1234");
-
-            // Préparation de la requête SQL 
-            String query = "INSERT INTO vente (quantite_vendue_vente, date_vente, id_produit) VALUES (?,?,?)"; 
-            PreparedStatement pstmt = con.prepareStatement(query);
-
-            // Récupération des données saisies par l'utilisateur 
-            int quantitySelling = quantity; 
-            String dateSelling = date; 
-            int productSelling = product; 
-
-            // Remplissage des paramètres de la requête SQL 
-            pstmt.setInt(1, quantitySelling); 
-            pstmt.setString(2, dateSelling); 
-            pstmt.setInt(3, productSelling); 
-
-            // Exécution de la requête SQL 
-            int rowsAffected = pstmt.executeUpdate();
-
-            // Fermeture de la connexion et du PreparedStatement 
-            pstmt.close(); 
-            con.close(); 
-
-            // Affichage d'un message de succès 
-            JOptionPane.showMessageDialog(null, "Vente ajoutée avec succès!");
-        } catch (SQLException ex) { 
-            ex.printStackTrace(); 
-            JOptionPane.showMessageDialog(null, "Erreur lors de l'ajout de la vente: " + ex.getMessage());
-        }
     }
 }

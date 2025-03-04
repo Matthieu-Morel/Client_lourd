@@ -59,7 +59,6 @@ public class ProduitDAO {
         String query = "SELECT * FROM produit " +
                         "JOIN fournisseur ON produit.id_fournisseur=fournisseur.id_fournisseur";
         ArrayList<Product> products = new ArrayList<>();
-        FournisseurDAO fournisseurDAO = new FournisseurDAO();
 
         try (Connection connection = Connexion.getConnection();
             PreparedStatement statement = connection.prepareStatement(query)) {

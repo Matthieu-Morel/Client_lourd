@@ -1,10 +1,11 @@
 package view;
 
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,92 +26,94 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import controler.ProduitController;
+import controler.VenteController;
 import model.Product;
 import model.Provider;
+import model.Selling;
 import model.Utilisateur;
 import model.DAO.FournisseurDAO;
 import model.DAO.ProduitDAO;
+import model.DAO.VenteDAO;
 import utils.CustomTableModel;
 
-public class ProductsView {
+public class SellingsView {
     private JDialog frame;
     private JLabel titleLabel;
-    private JTable productsTable;
+    private JTable sellingsTable;
     private JButton btnAdd;
     private JButton btnUpdate;
     private JButton btnDelete;
     private JButton btnBackToMenu;
+    private ArrayList<Selling> sellings;
     private ArrayList<Product> products;
-    private ArrayList<Provider> providers;
 
-    public ProductsView(JFrame jFrame, Utilisateur utilisateur) {
-        frame = new JDialog(jFrame, "Gestion des Produits", true);
+    public SellingsView(JFrame jFrame, Utilisateur utilisateur) {
+        frame = new JDialog(jFrame, "Gestion des ventes", true);
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
 
-        titleLabel = new JLabel("Liste des Produits", SwingConstants.CENTER);
+        titleLabel = new JLabel("Liste des ventes", SwingConstants.CENTER);
 
         String[] columnNames = {
             "Nom du produit",
-            "Quantité en stock",
-            "Prix unitaire",
-            "Fournisseur",
+            "Quantité vendue",
+            "Date de vente",
         };
 
+        VenteDAO venteDAO = new VenteDAO();
         ProduitDAO produitDAO = new ProduitDAO();
-        FournisseurDAO fournisseurDAO = new FournisseurDAO();
-        ProduitController produitController = new ProduitController(this, produitDAO, fournisseurDAO);
+        VenteController venteController = new VenteController(this, venteDAO, produitDAO);
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         List<Object[]> data = new ArrayList<>();
-        for (Product product : products) {
-            String[] providerData = {
-                product.getName(),
-                Integer.toString(product.getQuantity()),
-                Double.toString(product.getUnitPrice()),
-                product.getProvider().getName(),
+        for (Selling selling : sellings) {
+            String[] sellingData = {
+                selling.getProduct().getName(),
+                Integer.toString(selling.getQuantitySold()),
+                simpleDateFormat.format(selling.getDateSold()),
             };
-            data.add(providerData);
+            data.add(sellingData);
         }
 
         CustomTableModel model = new CustomTableModel(data.toArray(new Object[0][]), columnNames);
-        productsTable = new JTable(model);
-        productsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        JScrollPane jScrollPane = new JScrollPane(productsTable);
+        sellingsTable = new JTable(model);
+        sellingsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane jScrollPane = new JScrollPane(sellingsTable);
 
-        ProductsView parentView = this;
-        btnAdd = new JButton("Ajouter un produit");
+        SellingsView parentView = this;
+        btnAdd = new JButton("Ajouter une vente");
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AddProductView view = new AddProductView(jFrame, parentView, providers);
+                AddSellingView view = new AddSellingView(jFrame, parentView, products);
             }
         });
 
-        btnUpdate = new JButton("Modifier un produit");
+        btnUpdate = new JButton("Modifier une vente");
         btnUpdate.setEnabled(false);
         btnUpdate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int row = productsTable.getSelectedRow();
-                if (row != -1) {
-                    Product product = products.get(row);
-                    UpdateProductView view = new UpdateProductView(frame, parentView, product, providers, row);
-                }
+                // int row = productsTable.getSelectedRow();
+                // if (row != -1) {
+                //     Product product = products.get(row);
+                //     UpdateProductView view = new UpdateProductView(frame, parentView, product, providers, row);
+                // }
             }
         });
 
-        btnDelete = new JButton("Supprimer un produit");
+        btnDelete = new JButton("Supprimer une vente");
         btnDelete.setEnabled(false);
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int row = productsTable.getSelectedRow();
-                if (row != -1) {
-                    Product product = products.get(row);
-                    DeleteProductView view = new DeleteProductView(frame, parentView, product, row);
-                }
+                // int row = productsTable.getSelectedRow();
+                // if (row != -1) {
+                //     Product product = products.get(row);
+                //     DeleteProductView view = new DeleteProductView(frame, parentView, product, row);
+                // }
             }
         });
 
@@ -122,10 +125,10 @@ public class ProductsView {
             }
         });
 
-        productsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        sellingsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                int row = productsTable.getSelectedRow();
+                int row = sellingsTable.getSelectedRow();
                 if (row != -1) {
                     btnUpdate.setEnabled(true);
                     if (!utilisateur.getRole().equals("manager")) {
@@ -168,42 +171,23 @@ public class ProductsView {
         frame.setVisible(true);
     }
 
+    public void setSellings(ArrayList<Selling> sellings) {
+        this.sellings = sellings;
+    }
+
     public void setProducts(ArrayList<Product> products) {
         this.products = products;
     }
 
-    public void setProviders(ArrayList<Provider> providers) {
-        this.providers = providers;
-    }
-
-    public void addProductToTable(Product product) {
-        DefaultTableModel tableModel = (DefaultTableModel) productsTable.getModel();
-        String[] productData = {
-            product.getName(),
-            Integer.toString(product.getQuantity()),
-            Double.toString(product.getUnitPrice()),
-            product.getProvider().getName(),
+    public void addSellingToTable(Selling selling) {
+        DefaultTableModel tableModel = (DefaultTableModel) sellingsTable.getModel();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String[] sellingData = {
+            selling.getProduct().getName(),
+            Integer.toString(selling.getQuantitySold()),
+            simpleDateFormat.format(selling.getDateSold()),
         };
-        tableModel.addRow(productData);
-        products.add(product);
-    }
-
-    public void updateProduct(int index, Product product) {
-        DefaultTableModel tableModel = (DefaultTableModel) productsTable.getModel();
-        String[] productData = {
-            product.getName(),
-            Integer.toString(product.getQuantity()),
-            Double.toString(product.getUnitPrice()),
-            product.getProvider().getName(),
-        };
-        tableModel.removeRow(index);
-        tableModel.insertRow(index, productData);
-        products.set(index, product);
-    }
-
-    public void deleteProduct(int index) {
-        DefaultTableModel tableModel = (DefaultTableModel) productsTable.getModel();
-        tableModel.removeRow(index);
-        products.remove(index);
+        tableModel.addRow(sellingData);
+        sellings.add(selling);
     }
 }

@@ -1,51 +1,56 @@
 package view;
 
 import javax.swing.*;
+import javax.swing.JSpinner.DateEditor;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.border.EmptyBorder;
 
+import controler.ProduitController;
+import controler.VenteController;
 import model.Product;
-import model.Provider;
+import model.Selling;
 import model.DAO.ProduitDAO;
 import model.DAO.VenteDAO;
-import controler.ProduitController;
 
-public class AddProductView {
+public class AddSellingView {
     private JDialog frame;
-    private JLabel labelName;
+    private JLabel labelProduct;
     private JLabel labelQuantity;
-    private JLabel labelUnitPrice;
-    private JLabel labelProvider;
-    private JTextField txtName;
+    private JLabel labelDate;
+    private JComboBox jBoxProduct;
     private JTextField txtQuantity;
-    private JTextField txtUnitPrice;
-    private JComboBox jBoxProvider;
+    private JSpinner dateSpinner;
     private JButton btnAdd;
     private JButton btnCancel;
-    private ArrayList<Provider> providers;
 
-    public AddProductView(JFrame jFrame, ProductsView parentView, ArrayList<Provider> providers) {
+    public AddSellingView(JFrame jFrame, SellingsView parentView, ArrayList<Product> products) {
         frame = new JDialog(jFrame, "Ajouter un produit", true);
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBorder(new EmptyBorder(10, 20, 10, 20));
 
-        labelName = new JLabel("Nom du produit :", SwingConstants.CENTER);
-        labelQuantity = new JLabel("Quantité en stock :", SwingConstants.CENTER);
-        labelUnitPrice = new JLabel("Prix unitaire (euros) :", SwingConstants.CENTER);
-        labelProvider = new JLabel("Fournisseur :", SwingConstants.CENTER);
+        labelProduct = new JLabel("Produit vendu :", SwingConstants.CENTER);
+        labelQuantity = new JLabel("Quantité vendue :", SwingConstants.CENTER);
+        labelDate = new JLabel("Date de vente :", SwingConstants.CENTER);
 
-        txtName = new JTextField(15);
+        jBoxProduct = new JComboBox<>(products.toArray());
         txtQuantity = new JTextField(15);
-        txtUnitPrice = new JTextField(15);
-        jBoxProvider = new JComboBox<>(providers.toArray());
+
+        SpinnerDateModel model = new SpinnerDateModel();
+        dateSpinner = new JSpinner(model);
+        DateEditor editor = new DateEditor(dateSpinner, "dd/MM/yyyy");
+        dateSpinner.setEditor(editor);
 
         btnAdd = new JButton("Ajouter");
         btnAdd.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -59,20 +64,18 @@ public class AddProductView {
             }
         });
         
-        ProduitDAO produitDAO = new ProduitDAO();
-        ProduitController controller = new ProduitController(this, produitDAO, parentView);
+        VenteDAO venteDAO = new VenteDAO();
+        VenteController controller = new VenteController(this, venteDAO, parentView);
 
         JPanel formContainer = new JPanel();
-        formContainer.setLayout(new GridLayout(4, 2, 10, 10));
+        formContainer.setLayout(new GridLayout(3, 2, 10, 10));
         formContainer.setBorder(new EmptyBorder(0, 0, 10, 0));
-        formContainer.add(labelName);
-        formContainer.add(txtName);
+        formContainer.add(labelProduct);
+        formContainer.add(jBoxProduct);
         formContainer.add(labelQuantity);
         formContainer.add(txtQuantity);
-        formContainer.add(labelUnitPrice);
-        formContainer.add(txtUnitPrice);
-        formContainer.add(labelProvider);
-        formContainer.add(jBoxProvider);
+        formContainer.add(labelDate);
+        formContainer.add(dateSpinner);
         
         JPanel btnContainer = new JPanel();
         btnContainer.setLayout(new BoxLayout(btnContainer, BoxLayout.X_AXIS));
@@ -89,27 +92,28 @@ public class AddProductView {
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.setVisible(true); 
+        frame.setVisible(true);
     }
 
-    public String getNomProduit() {
-        return txtName.getText();
-    }
-    public String getPrixProduit() {
-            return txtUnitPrice.getText();
-    }
-    public String getQuantity() {
-        return txtQuantity.getText();
-    }
-    public Provider getProvider() {
-        Provider provider = (Provider) jBoxProvider.getSelectedItem();
-        return provider;
-    }
-    public void setAjouterProduitListener(ActionListener listener) {
-        btnAdd.addActionListener(listener);
-    }
     public void close() {
         frame.dispose();
     }
-       
+
+    public void addButtonCreateListener(ActionListener actionListener) {
+        btnAdd.addActionListener(actionListener);
+    }
+
+    public Product getProduct() {
+        Product product = (Product) jBoxProduct.getSelectedItem();
+        return product;
+    }
+
+    public String getQuantity() {
+        return txtQuantity.getText();
+    }
+
+    public java.sql.Date getDate() {
+        java.util.Date date = (java.util.Date) dateSpinner.getValue();
+        return new java.sql.Date(date.getTime());
+    }
 }
