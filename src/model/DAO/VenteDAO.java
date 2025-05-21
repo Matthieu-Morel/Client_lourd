@@ -8,13 +8,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import model.DAO.Connexion;
-import model.Product;
-import model.Provider;
-import model.Selling;
+import model.Produit;
+import model.Fournisseur;
+import model.Vente;
 
 public class VenteDAO {
-    public int ajouterVente(Selling vente) {
+    public int ajouterVente(Vente vente) {
         String query = "INSERT INTO vente (id_produit, quantite_vendue_vente, date_vente) VALUES (?, ?, ?)";
         int createdId = -1;
 
@@ -33,7 +32,7 @@ public class VenteDAO {
         }
         return createdId;
     }
-    public void supprimerVente(Selling vente) {
+    public void supprimerVente(Vente vente) {
         String query = "DELETE FROM vente WHERE id_vente=?";
         try (Connection connection = Connexion.getConnection();
             PreparedStatement statement = connection.prepareStatement(query)) {
@@ -43,7 +42,7 @@ public class VenteDAO {
             System.out.println("Erreur lors de la suppression de la vente : " + e.getMessage());
         }
     }
-    public void modifierVente(Selling vente) {
+    public void modifierVente(Vente vente) {
         String query = "UPDATE vente SET id_produit=?, quantite_vendue_vente=?, date_vente=? WHERE id_vente=?";
         try (Connection connection = Connexion.getConnection();
             PreparedStatement statement = connection.prepareStatement(query)) {
@@ -56,11 +55,11 @@ public class VenteDAO {
             System.out.println("Erreur lors de la modification de la vente : " + e.getMessage());
         }
     }
-    public ArrayList<Selling> getVentes() {
+    public ArrayList<Vente> getVentes() {
         String query = "SELECT * FROM vente " +
                         "JOIN produit ON vente.id_produit=produit.id_produit " +
                         "JOIN fournisseur ON produit.id_fournisseur=fournisseur.id_fournisseur ";
-        ArrayList<Selling> sellings = new ArrayList<>();
+        ArrayList<Vente> sellings = new ArrayList<>();
 
         try (Connection connection = Connexion.getConnection();
             PreparedStatement statement = connection.prepareStatement(query)) {
@@ -76,15 +75,15 @@ public class VenteDAO {
                 String nameProvider = resultSet.getString("nom_fournisseur");
                 String addressProvider = resultSet.getString("adresse_fournisseur");
                 String phoneProvider = resultSet.getString("telephone_fournisseur");
-                Provider provider = new Provider(idProvider, nameProvider, addressProvider, phoneProvider);
+                Fournisseur provider = new Fournisseur(idProvider, nameProvider, addressProvider, phoneProvider);
 
                 int idProduct = resultSet.getInt("id_produit");
                 String nameProduct = resultSet.getString("nom_produit");
                 int quantityProduct = resultSet.getInt("quantite_produit");
                 Double unitPriceProduct = resultSet.getDouble("prix_unitaire_produit");
-                Product product = new Product(idProduct, nameProduct, quantityProduct, unitPriceProduct, provider);
+                Produit product = new Produit(idProduct, nameProduct, quantityProduct, unitPriceProduct, provider);
                 
-                Selling selling = new Selling(id, product, quantity, date);
+                Vente selling = new Vente(id, product, quantity, date);
 
                 sellings.add(selling);
             }

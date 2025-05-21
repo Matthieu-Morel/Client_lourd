@@ -7,10 +7,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import model.Provider;
+import model.Fournisseur;
 
 public class FournisseurDAO {
-    public int ajouterFournisseur(Provider provider) {
+    public int ajouterFournisseur(Fournisseur provider) {
         String query = "INSERT INTO fournisseur (nom_fournisseur, adresse_fournisseur, telephone_fournisseur) VALUES (?, ?, ?)";
         int createdId = -1;
         try (Connection connection = Connexion.getConnection();
@@ -28,7 +28,7 @@ public class FournisseurDAO {
         }
         return createdId;
     }
-    public void supprimerFournisseur(Provider provider) {
+    public void supprimerFournisseur(Fournisseur provider) {
         String query = "DELETE FROM fournisseur WHERE id_fournisseur=?";
         try (Connection connection = Connexion.getConnection();
             PreparedStatement statement = connection.prepareStatement(query)) {
@@ -38,7 +38,7 @@ public class FournisseurDAO {
             System.out.println("Erreur lors de la suppression du fournisseur : " + e.getMessage());
         }
     }
-    public void modifierFournisseur(Provider provider) {
+    public void modifierFournisseur(Fournisseur provider) {
         String query = "UPDATE fournisseur SET nom_fournisseur=?, adresse_fournisseur=?, telephone_fournisseur=? WHERE id_fournisseur = ?";
         try (Connection connection = Connexion.getConnection();
             PreparedStatement statement = connection.prepareStatement(query)) {
@@ -51,9 +51,9 @@ public class FournisseurDAO {
             System.out.println("Erreur lors de la modification du fournisseur : " + e.getMessage());
         }
     }
-    public ArrayList<Provider> getFournisseurs() {
+    public ArrayList<Fournisseur> getFournisseurs() {
         String query = "SELECT * FROM fournisseur";
-        ArrayList<Provider> providers = new ArrayList<>();
+        ArrayList<Fournisseur> providers = new ArrayList<>();
 
         try (Connection connection = Connexion.getConnection();
             PreparedStatement statement = connection.prepareStatement(query)) {
@@ -66,7 +66,7 @@ public class FournisseurDAO {
                 String address = resultSet.getString("adresse_fournisseur");
                 String phone = resultSet.getString("telephone_fournisseur");
 
-                Provider provider = new Provider(id, name, address, phone);
+                Fournisseur provider = new Fournisseur(id, name, address, phone);
 
                 providers.add(provider);
             }
@@ -76,9 +76,9 @@ public class FournisseurDAO {
 
         return providers;
     }
-    public Provider getFournisseurById(int idProvider) {
+    public Fournisseur getFournisseurById(int idProvider) {
         String query = "SELECT * FROM fournisseur WHERE id_fournisseur=?";
-        Provider provider = new Provider();
+        Fournisseur provider = new Fournisseur();
 
         try (Connection connection = Connexion.getConnection();
             PreparedStatement statement = connection.prepareStatement(query)) {
@@ -91,9 +91,9 @@ public class FournisseurDAO {
             String name = resultSet.getString("nom_fournisseur");
             String address = resultSet.getString("adresse_fournisseur");
             String phone = resultSet.getString("telephone_fournisseur");
-            provider = new Provider(id, name, address, phone);
+            provider = new Fournisseur(id, name, address, phone);
         } catch (SQLException e) {
-            System.out.println("Erreur lors de l'obtention des fournisseurs : " + e.getMessage());
+            System.out.println("Erreur lors de l'obtention du fournisseur : " + e.getMessage());
         }
 
         return provider;

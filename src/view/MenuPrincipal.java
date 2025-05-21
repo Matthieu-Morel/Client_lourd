@@ -3,8 +3,8 @@ package view;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import model.Product;
-import model.Provider;
+import model.Produit;
+import model.Fournisseur;
 import model.Utilisateur;
 import model.DAO.FournisseurDAO;
 import model.DAO.ProduitDAO;
@@ -15,7 +15,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList; 
  
 public class MenuPrincipal extends JFrame { 
-    private Utilisateur utilisateur;
     private JButton btnProvider;
     private JButton btnProduct;
     private JButton btnSelling;
@@ -23,7 +22,6 @@ public class MenuPrincipal extends JFrame {
     private JButton btnQuit;
      
     public MenuPrincipal(Utilisateur utilisateur) {
-        this.utilisateur = utilisateur; 
         setTitle("Menu Principal"); 
         setLayout(new FlowLayout()); 
         setSize(350, 400); 
@@ -41,18 +39,18 @@ public class MenuPrincipal extends JFrame {
         btnProvider.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         btnProvider.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ProvidersView providerView = new ProvidersView(frame, utilisateur);
+                VueFournisseurs providerView = new VueFournisseurs(frame, utilisateur);
             }
         });
         btnProduct = new JButton("Gestion des produits");
         btnProduct.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         btnProduct.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ArrayList<Provider> providers = fournisseurDAO.getFournisseurs();
+                ArrayList<Fournisseur> providers = fournisseurDAO.getFournisseurs();
                 if (providers.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Aucun fournisseur disponible. Veuillez ajouter un fournisseur pour ajouter un produit.");
                 } else {
-                    ProductsView view = new ProductsView(frame, utilisateur);
+                    VueProduits view = new VueProduits(frame, utilisateur);
                 }
             }
         });
@@ -60,11 +58,11 @@ public class MenuPrincipal extends JFrame {
         btnSelling.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         btnSelling.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ArrayList<Product> products = produitDAO.getProduits();
+                ArrayList<Produit> products = produitDAO.getProduits();
                 if (products.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Aucun produit disponible. Veuillez ajouter un produit pour ajouter une vente.");
                 } else {
-                    SellingsView view = new SellingsView(frame, utilisateur);
+                    VueVentes view = new VueVentes(frame, utilisateur);
                 }
             }
         });
@@ -74,7 +72,7 @@ public class MenuPrincipal extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new LoginView();
+                new VueConnexion();
             } 
         });
         btnQuit = new JButton("Quitter");

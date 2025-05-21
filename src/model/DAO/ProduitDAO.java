@@ -7,12 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import model.Product;
-import model.Provider;
-import model.DAO.Connexion;
+import model.Produit;
+import model.Fournisseur;
 
 public class ProduitDAO {
-    public int ajouterProduit(Product produit) {
+    public int ajouterProduit(Produit produit) {
         String query = "INSERT INTO produit (nom_produit, prix_unitaire_produit, quantite_produit, id_fournisseur) VALUES (?, ?, ?, ?)";
         int createdId = -1;
         try (Connection connection = Connexion.getConnection();
@@ -31,7 +30,7 @@ public class ProduitDAO {
         }
         return createdId;
     }
-    public void supprimerProduit(Product produit) {
+    public void supprimerProduit(Produit produit) {
         String query = "DELETE FROM produit WHERE id_produit=?";
         try (Connection connection = Connexion.getConnection();
             PreparedStatement statement = connection.prepareStatement(query)) {
@@ -41,7 +40,7 @@ public class ProduitDAO {
             System.out.println("Erreur lors de la suppression du produit : " + e.getMessage());
         }
     }
-    public void modifierProduit(Product produit) {
+    public void modifierProduit(Produit produit) {
         String query = "UPDATE produit SET nom_produit=?, quantite_produit=?, prix_unitaire_produit=?, id_fournisseur=? WHERE id_produit = ?";
         try (Connection connection = Connexion.getConnection();
             PreparedStatement statement = connection.prepareStatement(query)) {
@@ -55,10 +54,10 @@ public class ProduitDAO {
             System.out.println("Erreur lors de la modification du produit : " + e.getMessage());
         }
     }
-    public ArrayList<Product> getProduits() {
+    public ArrayList<Produit> getProduits() {
         String query = "SELECT * FROM produit " +
                         "JOIN fournisseur ON produit.id_fournisseur=fournisseur.id_fournisseur";
-        ArrayList<Product> products = new ArrayList<>();
+        ArrayList<Produit> products = new ArrayList<>();
 
         try (Connection connection = Connexion.getConnection();
             PreparedStatement statement = connection.prepareStatement(query)) {
@@ -75,9 +74,9 @@ public class ProduitDAO {
                 String nameProvider = resultSet.getString("nom_fournisseur");
                 String addressProvider = resultSet.getString("adresse_fournisseur");
                 String phoneProvider = resultSet.getString("telephone_fournisseur");
-                Provider provider = new Provider(idProvider, nameProvider, addressProvider, phoneProvider);
+                Fournisseur provider = new Fournisseur(idProvider, nameProvider, addressProvider, phoneProvider);
                 
-                Product product = new Product(id, name, quantity, unitPrice, provider);
+                Produit product = new Produit(id, name, quantity, unitPrice, provider);
 
                 products.add(product);
             }

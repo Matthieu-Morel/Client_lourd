@@ -1,9 +1,9 @@
 package App;
 
-import view.LoginView;
+import view.VueConnexion;
 
 public class App {
     public static void main(String[] args) {
-        new LoginView();
+        new VueConnexion();
     }
 }
